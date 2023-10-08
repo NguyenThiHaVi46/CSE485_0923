@@ -11,9 +11,9 @@
 
 
     <div class="container">
-    <!-- <?php
-   include '../menu.php';
-     ?> -->
+      <?php
+        include '../menu.php';
+      ?>
         <h3 class ="text-center text-uppercase text-success my-3" >HOSPITAL MANAGEMENT</h3>
         <a href="<?=DOMAIN."/public/index.php?controller=doctor&action=addForm"?>"class ='btn btn-success'>ADD</a>
         <table class="table">
@@ -36,7 +36,7 @@
             <td><?= $each->getName(); ?></td>
             <td><?= $each->getSpecialist(); ?></td>
             <td>
-              <a href="<?= DOMAIN.'app/views/doctor/edit.php?id=' .$each->getId(); ?>"><i class="bi bi-pencil-square"></i></a>
+              <a href="<?= DOMAIN.'/public/index.php?controller=doctor&action=edit&id=' .$each->getId(); ?>"><i class="bi bi-pencil-square"></i></a>
             </td>
             <td>
               <a href="" data-bs-toggle="modal" data-bs-target="#id<?= $each->getID() ?>"><i class="bi bi-trash"></i></a>

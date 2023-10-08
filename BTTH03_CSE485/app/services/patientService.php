@@ -1,43 +1,45 @@
 <?php
- include(APP_ROOT . "/app/models/doctor.php");
- include(APP_ROOT . "/app/libs/DBconnection.php");
+ include(APP_ROOT . '/app/models/patient.php');
+ include(APP_ROOT . '/app/libs/DBconnection.php');
 
- class DoctorService{
-    public function getAllDoctor(){
+ class PatientService{
+    public function getAllPatient(){
         $DBconnection = new DBconnection();
         $conn = $DBconnection->getConnection();
-        $sql = "SELECT * FROM bacsi";
+        $sql = "SELECT * from benhnhan";
         if($conn != null){
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $results = $stmt->fetchAll();
-            $allDoctor = [];
+            $allPatient = [];
             foreach($results as $each){
-                $doctor = new Doctorr($each[0], $each[1], $each[2]);
-                $allDoctor[] = $doctor;
+                $patient = new Patients($each[0], $each[1], $each[2], $each[3], $each[4]);
+                $allPatient[] = $patient;
             }
-            return $allDoctor;
-        }     
+            return $allPatient;
+        }
     }
-    public function getDoctor($id){
+
+    public function getPatient($id){
         $DBconnection = new DBconnection();
         $conn = $DBconnection->getConnection();
-        $sql = "SELECT * FROM bacsi where id = ?";
+        $sql = "SELECT * FROM benhnhan where id = ?";
         if($conn != null){
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(1,$id);
             $stmt->execute();
             $results = $stmt->fetch();
-            $doctor = new Doctorr($results[0], $results[1], $results[2]);
-            return $doctor;
+            $patient = new Patients($results[0], $results[1], $results[2], $results[3], $results[4]);
+            return $patient;
         }
         
     }
-    public function addDoctor($nameDoctor, $specialist){
+
+    public function addPatient($namePatient, $date, $signal, $idDoctor){
         $DBconnection = new DBconnection();
         $conn = $DBconnection->getConnection();
         if($conn != null){
-                $sql = "INSERT INTO bacsi (tenBacSi, chuyenKhoa) values('$nameDoctor', '$specialist')";
+                $sql = "INSERT INTO benhnhan (tenBenhNhan, ngayKham, trieuChung, idBacSi) values('$namePatient', '$date', '$signal', '$idDoctor')";
                 $stmt = $conn->prepare($sql);
                 $stmt->execute();
                 return true; 
@@ -45,10 +47,10 @@
         return false;  
 
     }
-    public function deleteDoctor($id){
+    public function deletePatient($id){
         $DBconnection = new DBconnection();
         $conn = $DBconnection->getConnection();
-        $sql = "DELETE FROM bacsi where id = '$id'";
+        $sql = "DELETE FROM benhnhan where id = '$id'";
         if($conn != null){
             $stmt = $conn->prepare($sql);
             $stmt->execute();
@@ -56,17 +58,18 @@
             }
             return false;
     }
-
-    public function editDoctor($id, $name, $specialist)
+    public function editPatient($id, $name, $date, $signal, $idDoctor)
     {
         $DBconnection = new DBconnection();
         $conn = $DBconnection->getConnection();
         if($conn != null){
-            $sql = "Update bacsi set tenBacSi =?, chuyenKhoa =? where id =?";
+            $sql = "Update benhnhan set tenBenhNhan =?, ngayKham=?, trieuChung=?, idBacSi=? where id =?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bindParam(1, $name);
-                $stmt->bindParam(2, $specialist);
-                $stmt->bindParam(3, $id);
+                $stmt->bindParam(2, $date);
+                $stmt->bindParam(3, $signal);
+                $stmt->bindParam(4, $idDoctor);
+                $stmt->bindParam(5, $id);
                 $stmt->execute();
                 return true; 
         }

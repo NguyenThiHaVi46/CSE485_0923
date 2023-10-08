@@ -13,19 +13,18 @@
     }
     
     public function add(){
-        if(isset($_POST["id"]) && isset($_POST["nameDoctor"]) && isset($_POST["specialist"])){
-            $id = $_POST["id"];
+        if(isset($_POST["nameDoctor"]) && isset($_POST["specialist"])){
             $name = $_POST["nameDoctor"];
             $specialist = $_POST["specialist"];
             $doctorService = new DoctorService();
-            $doctorAdd = $doctorService->addDoctor($id, $name, $specialist);
+            $doctorAdd = $doctorService->addDoctor($name, $specialist);
 
             if($doctorAdd){
                 header("Location:".DOMAIN."/public/index.php?controller=doctor&action=index");
                 echo "Thêm thành công";
             }else{
-                $studentService = new DoctorService();
-                $allDoctor = $studentService->getAllDoctor();
+                $DoctorService = new DoctorService();
+                $allDoctor = $DoctorService->getAllDoctor();
                 require(APP_ROOT."/app/views/doctor/index.php");
                 echo "Thêm thất bại";
             }
@@ -48,8 +47,43 @@
         }else{
             header("Location:".DOMAIN."/public/index.php?controller=doctor&action=index");
         }
+    }
 
-
+    public function edit(){
+        if(isset($_POST["id"])&&isset($_POST["nameDoctor"]) && isset($_POST["specialist"])){
+            $id=$_POST["id"];
+            $name=($_POST["nameDoctor"]);
+            $specialist=($_POST["specialist"]);
+            $doctorService=new DoctorService();
+            $doctor=$doctorService->editDoctor($id, $name, $specialist);
+            if($doctor==false){
+                require_once(APP_ROOT."/app/views/Error/index.php");
+            }
+            else{
+                header("Location:".DOMAIN."/public/index.php?controller=doctor&action=index");
+            }
+        }
+        else{
+            if(isset($_GET["id"])){
+                $id=$_GET["id"];
+                $doctorService=new DoctorService();
+                $doctor=$doctorService->getDoctor($id);
+                require_once(APP_ROOT."/app/views/doctor/edit.php");
+            }        
+        }
+    }
+    public function editForm(){
+        if(isset($_GET["id"])){
+            $id=$_GET["id"];
+            $doctorService=new DoctorService();
+            $doctor=$doctorService->getAllDoctor($id);
+            require_once(APP_ROOT."/app/views/doctor/edit.php");
+        }
+    }
+}
+class ErrorController{
+    public function index(){
+        require_once(APP_ROOT."/app/views/error/index.php");
     }
  }
 ?>
